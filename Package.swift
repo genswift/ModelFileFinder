@@ -5,24 +5,26 @@ import PackageDescription
 
 let package = Package(
     name: "SampleLibrary",
-		platforms: [
-				.iOS(.v17)
-		],
+    platforms: [
+        .iOS(.v17),
+        .macOS(.v14),
+    ],
     products: [
         .library(
             name: "SampleLibrary",
-            targets: ["SampleLibrary"]),
+            targets: ["SampleLibrary"]
+        ),
     ],
-		dependencies: [
-				.package(url: "https://github.com/realm/SwiftLint", branch: "main")
-		],
+    dependencies: [
+        .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.54.0")
+    ],
     targets: [
         .target(
             name: "SampleLibrary"
-				),
+        ),
         .testTarget(
             name: "SampleLibraryTests",
             dependencies: ["SampleLibrary"]
-				),
+        ),
     ]
 )

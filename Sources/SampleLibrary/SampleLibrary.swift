@@ -3,55 +3,53 @@
 //
 //
 
-import os
 import Foundation
+import os
 
 public struct SampleLibrary {
+  private let fileManager: FileManagerProtocol
 
-		private let fileManager: FileManagerProtocol
+  private let logger = Logger(
+    subsystem: "io.swiftpackage.fileNameGenerator",
+    category: "LibraryPackage"
+  )
 
-		private let logger = Logger(
-				subsystem: "io.swiftpackage.fileNameGenerator",
-				category: "LibraryPackage"
-		)
+  public init(fileManager: FileManagerProtocol = FileManager.default) {
+    self.fileManager = fileManager
+  }
 
-		public init(fileManager: FileManagerProtocol = FileManager.default) {
-				self.fileManager = fileManager
-		}
+  public func generateList() throws -> [String] {
+    var result = [String]()
 
-		public func generateList() throws -> [String] {
+    let currentFilePath = #file
+    let currentFileURL = URL(filePath: currentFilePath, directoryHint: .inferFromPath)
+    let sourceDirectoryURL = currentFileURL.deletingLastPathComponent()
 
-				var result = [String]()
+    print("")
+    print("this is currentFileURl: \(currentFileURL)")
+    print("")
 
-				let currentFilePath = #file
-				let currentFileURL = URL(filePath: currentFilePath, directoryHint: .inferFromPath)
-				let sourceDirectoryURL = currentFileURL.deletingLastPathComponent()
+    do {
+      let contents = try fileManager.contentsOfDirectory(
+        at: sourceDirectoryURL,
+        includingPropertiesForKeys: nil,
+        options: []
+      )
 
-				print("")
-				print("this is currentFileURl: \(currentFileURL)")
-				print("")
+      for fileUrl in contents {
+        result.append(fileUrl.lastPathComponent)
+      }
 
-				do {
-						let contents = try fileManager.contentsOfDirectory(
-								at: sourceDirectoryURL,
-								includingPropertiesForKeys: nil,
-								options: []
-						)
+    } catch {
+      logger.error("Error occurred: \(error.localizedDescription)")
+      throw error
+    }
 
-						contents.forEach { fileUrl in
-								result.append(fileUrl.lastPathComponent)
-						}
+    let currentFileName = URL(
+      filePath: currentFilePath,
+      directoryHint: .inferFromPath
+    ).lastPathComponent
 
-				} catch {
-						logger.error("Error occurred: \(error.localizedDescription)")
-						throw error
-				}
-
-				let currentFileName = URL(
-						filePath: currentFilePath,
-						directoryHint: .inferFromPath
-				).lastPathComponent
-
-				return result.filter { $0 != currentFileName }
-		}
+    return result.filter { $0 != currentFileName }
+  }
 }

@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  MockFileManager.swift
+//
 //
 //  Created by msuzoagu on 7/22/24.
 //
@@ -9,13 +9,13 @@ import Foundation
 import SampleLibrary
 
 class MockFileManager: FileManagerProtocol {
-		var mockContents: [URL] = []
+  var mockContents: [URL] = []
 
-		func contentsOfDirectory(
-				at url: URL,
-				includingPropertiesForKeys keys: [URLResourceKey]?,
-				options mask: FileManager.DirectoryEnumerationOptions
-		) throws -> [URL] {
-				return mockContents
-		}
+  func contentsOfDirectory(
+    at _: URL,
+    includingPropertiesForKeys _: [URLResourceKey]?,
+    options _: FileManager.DirectoryEnumerationOptions
+  ) throws -> [URL] {
+    mockContents
+  }
 }
