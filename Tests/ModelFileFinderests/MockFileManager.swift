@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SampleLibrary
+import ModelFileFinder
 
 class MockFileManager: FileManagerProtocol {
   var mockContents: [URL] = []

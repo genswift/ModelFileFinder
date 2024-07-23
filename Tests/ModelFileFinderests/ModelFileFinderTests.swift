@@ -1,30 +1,29 @@
 //
-//  SampleLibraryTests.swift
+//  ModelFileFinderTests.swift
 //
 //
 //  Created by msuzoagu on 7/22/24.
 //
 
 import os
-@testable import SampleLibrary
+@testable import ModelFileFinder
 import XCTest
 
-final class SampleLibraryTests: XCTestCase {
-  var sampleLibrary: SampleLibrary!
+
+final class ModelFileFinderTests: XCTestCase {
+
+  var modelFileFinder: ModelFileFinder!
   var mockFileManager: MockFileManager!
 
   override func setUpWithError() throws {
     try super.setUpWithError()
 
-    /// Initialize mockFileManager and set its mock contents
     mockFileManager = makeMockDirectoryContents()
-
-    /// Initialize sampleLibrary with the mockFileManager
-    sampleLibrary = SampleLibrary(fileManager: mockFileManager)
+    modelFileFinder = ModelFileFinder(fileManager: mockFileManager)
   }
 
   override func tearDownWithError() throws {
-    sampleLibrary = nil
+    modelFileFinder = nil
     mockFileManager = nil
     try super.tearDownWithError()
   }
@@ -33,9 +32,10 @@ final class SampleLibraryTests: XCTestCase {
     let mockFileManager = MockFileManager()
 
     mockFileManager.mockContents = [
-      URL(fileURLWithPath: "/path/to/first.swift"),
-      URL(fileURLWithPath: "/path/to/second.swift"),
-      URL(fileURLWithPath: "/path/to/SampleLibrary.swift"),
+      URL(fileURLWithPath: "/path/to/FirstModel.swift"),
+      URL(fileURLWithPath: "/path/to/SecondModel.swift"),
+      URL(fileURLWithPath: "/path/to/README.md"),
+      URL(fileURLWithPath: "/path/to/Regular.swift")
     ]
 
     return mockFileManager
@@ -48,8 +48,8 @@ final class SampleLibraryTests: XCTestCase {
 
   func testGenerateList() throws {
     do {
-      let result = try sampleLibrary.generateList()
-      let expectedFiles = ["first.swift", "second.swift"]
+      let result = try modelFileFinder.makeList()
+      let expectedFiles = ["FirstModel", "SecondModel"]
       XCTAssertEqual(result.sorted(), expectedFiles, "generateList did not return expected files")
     } catch {
       Self.logger.error(
@@ -57,4 +57,5 @@ final class SampleLibraryTests: XCTestCase {
       )
     }
   }
+
 }

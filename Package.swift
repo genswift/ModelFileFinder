@@ -4,15 +4,15 @@
 import PackageDescription
 
 let package = Package(
-    name: "SampleLibrary",
+    name: "ModelFileFinder",
     platforms: [
         .iOS(.v17),
         .macOS(.v14),
     ],
     products: [
         .library(
-            name: "SampleLibrary",
-            targets: ["SampleLibrary"]
+            name: "ModelFileFinder",
+            targets: ["ModelFileFinder"]
         ),
     ],
     dependencies: [
@@ -20,11 +20,11 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "SampleLibrary"
+            name: "ModelFileFinder"
         ),
         .testTarget(
-            name: "SampleLibraryTests",
-            dependencies: ["SampleLibrary"]
+            name: "ModelFileFinderTests",
+            dependencies: ["ModelFileFinder"]
         ),
     ]
 )

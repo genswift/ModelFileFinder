@@ -6,11 +6,11 @@
 import Foundation
 import os
 
-public struct SampleLibrary {
+public struct ModelFileFinder {
   private let fileManager: FileManagerProtocol
 
   private let logger = Logger(
-    subsystem: "io.swiftpackage.fileNameGenerator",
+    subsystem: "io.swiftpackage.ListMaker",
     category: "LibraryPackage"
   )
 
@@ -18,16 +18,12 @@ public struct SampleLibrary {
     self.fileManager = fileManager
   }
 
-  public func generateList() throws -> [String] {
-    var result = [String]()
+  public func makeList() throws -> [String] {
+    var fileNames = [String]()
 
     let currentFilePath = #file
     let currentFileURL = URL(filePath: currentFilePath, directoryHint: .inferFromPath)
     let sourceDirectoryURL = currentFileURL.deletingLastPathComponent()
-
-    print("")
-    print("this is currentFileURl: \(currentFileURL)")
-    print("")
 
     do {
       let contents = try fileManager.contentsOfDirectory(
@@ -36,9 +32,7 @@ public struct SampleLibrary {
         options: []
       )
 
-      for fileUrl in contents {
-        result.append(fileUrl.lastPathComponent)
-      }
+      fileNames = contents.map { $0.lastPathComponent }
 
     } catch {
       logger.error("Error occurred: \(error.localizedDescription)")
@@ -50,6 +44,20 @@ public struct SampleLibrary {
       directoryHint: .inferFromPath
     ).lastPathComponent
 
-    return result.filter { $0 != currentFileName }
+    let intermediateResult = fileNames.filter { $0 != currentFileName }
+    let filesBySuffix = filteredBySuffix(intermediateResult)
+    return stripFileNamesOfSuffix(filesBySuffix)
+  }
+
+  private func filteredBySuffix(_ fileNamesList: [String] ) -> [String] {
+    return fileNamesList.filter { str in
+      str.hasSuffix("Model.swift")
+    }
+  }
+
+  private func stripFileNamesOfSuffix(_ fileNamesList: [String] ) -> [String] {
+    return fileNamesList.map { str in
+      str.replacingOccurrences(of: ".swift", with: "", options: .regularExpression)
+    }
   }
 }
