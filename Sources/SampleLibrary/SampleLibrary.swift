@@ -11,26 +11,30 @@ public struct SampleLibrary {
 		private let fileManager: FileManagerProtocol
 
 		private let logger = Logger(
-				subsystem: "io.swiftpackage.fileNameGenerator", 
+				subsystem: "io.swiftpackage.fileNameGenerator",
 				category: "LibraryPackage"
 		)
 
 		public init(fileManager: FileManagerProtocol = FileManager.default) {
 				self.fileManager = fileManager
 		}
-		
+
 		public func generateList() throws -> [String] {
 
 				var result = [String]()
 
 				let currentFilePath = #file
-				let currentFileURL = URL(fileURLWithPath: currentFilePath)
+				let currentFileURL = URL(filePath: currentFilePath, directoryHint: .inferFromPath)
 				let sourceDirectoryURL = currentFileURL.deletingLastPathComponent()
+
+				print("")
+				print("this is currentFileURl: \(currentFileURL)")
+				print("")
 
 				do {
 						let contents = try fileManager.contentsOfDirectory(
 								at: sourceDirectoryURL,
-								includingPropertiesForKeys: nil, 
+								includingPropertiesForKeys: nil,
 								options: []
 						)
 

@@ -1,3 +1,10 @@
+//
+//  SampleLibraryTests.swift
+//  
+//
+//  Created by msuzoagu on 7/22/24.
+//
+
 import os
 import XCTest
 @testable import SampleLibrary
@@ -39,9 +46,7 @@ final class SampleLibraryTests: XCTestCase {
 				subsystem: "io.swiftpackage.fileNameGenerator",
 				category: "LibraryPackageTests"
 		)
-
-
-    func testGenerateList() throws {
+		func testGenerateList() throws {
 
 				do {
 						let result = try sampleLibrary.generateList()
@@ -52,7 +57,7 @@ final class SampleLibraryTests: XCTestCase {
 						]
 
 						XCTAssertEqual(
-								result.sorted(), 
+								result.sorted(),
 								expectedFiles,
 								"the generateList method did ot return the expected files"
 						)
@@ -61,5 +66,6 @@ final class SampleLibraryTests: XCTestCase {
 								"Test failed with error: \(error.localizedDescription, privacy: .public)"
 						)
 				}
-    }
+		}
+
 }

@@ -1,0 +1,15 @@
+disabled_rules:
+  - colon
+  - comma
+  - control_statement
+
+indentation:
+  indent_width: 4
+  use_tabs: true
+
+included:
+  - Sources
+  - Tests
+
+excluded:
+  - Pods

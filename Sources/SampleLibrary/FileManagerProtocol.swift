@@ -9,14 +9,13 @@ import Foundation
 
 public protocol FileManagerProtocol {
 
-		///abstract functionality of fileManager.contentsOfDirectory
+		/// abstract functionality of fileManager.contentsOfDirectory
 		func contentsOfDirectory(
 				at url: URL,
 				includingPropertiesForKeys keys: [URLResourceKey]?,
 				options mask: FileManager.DirectoryEnumerationOptions
 		) throws -> [URL]
 }
-
 
 /// Extend FileManager to conform to Protocol
 /// `Note:` by extending FileManager to conform to
