@@ -7,21 +7,25 @@ import os
 import Foundation
 
 public struct SampleLibrary {
-		private static let logger = Logger(subsystem: "io.swiftpackage.fileNameGenerator", category: "LibraryPackage")
 
-		public static func generateList() throws -> [String] {
+		private let fileManager: FileManagerProtocol
+
+		private let logger = Logger(
+				subsystem: "io.swiftpackage.fileNameGenerator", 
+				category: "LibraryPackage"
+		)
+
+		public init(fileManager: FileManagerProtocol = FileManager.default) {
+				self.fileManager = fileManager
+		}
+		
+		public func generateList() throws -> [String] {
 
 				var result = [String]()
-				let fileManager = FileManager.default
+
 				let currentFilePath = #file
 				let currentFileURL = URL(fileURLWithPath: currentFilePath)
 				let sourceDirectoryURL = currentFileURL.deletingLastPathComponent()
-
-				print("")
-				print("this is currentFileURL: \(currentFileURL)")
-				print("")
-				print("this is sourceDirectoryURL: \(sourceDirectoryURL)")
-				print("")
 
 				do {
 						let contents = try fileManager.contentsOfDirectory(
@@ -39,9 +43,10 @@ public struct SampleLibrary {
 						throw error
 				}
 
-				let currentFileName = URL(filePath: currentFilePath, directoryHint: .inferFromPath).lastPathComponent
-				print("")
-				print("this is currentFileName: \(currentFileName)")
+				let currentFileName = URL(
+						filePath: currentFilePath,
+						directoryHint: .inferFromPath
+				).lastPathComponent
 
 				return result.filter { $0 != currentFileName }
 		}

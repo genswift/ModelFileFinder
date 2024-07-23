@@ -4,27 +4,51 @@ import XCTest
 
 final class SampleLibraryTests: XCTestCase {
 
-		private static let logger = Logger(
-				subsystem: "io.swiftpackage.fileNameGenerator", 
-				category: "LibraryPackageTests"
-		)
+		var sampleLibrary: SampleLibrary!
+		var mockFileManager: MockFileManager!
 
 		override func setUpWithError() throws {
 				try super.setUpWithError()
+
+				/// Initialize mockFileManager and set its mock contents
+				mockFileManager = makeMockDirectoryContents()
+
+				/// Initialize sampleLibrary with the mockFileManager
+				sampleLibrary = SampleLibrary(fileManager: mockFileManager)
 		}
 
 		override func tearDownWithError() throws {
+				sampleLibrary = nil
+				mockFileManager = nil
 				try super.tearDownWithError()
 		}
 
+		private func makeMockDirectoryContents() -> MockFileManager {
+				let mockFileManager = MockFileManager()
+
+				mockFileManager.mockContents = [
+						URL(fileURLWithPath: "/path/to/first.swift"),
+						URL(fileURLWithPath: "/path/to/second.swift"),
+						URL(fileURLWithPath: "/path/to/SampleLibrary.swift")
+				]
+
+				return mockFileManager
+		}
+
+		private static let logger = Logger(
+				subsystem: "io.swiftpackage.fileNameGenerator",
+				category: "LibraryPackageTests"
+		)
+
 
     func testGenerateList() throws {
+
 				do {
-						let result = try SampleLibrary.generateList()
+						let result = try sampleLibrary.generateList()
 
 						let expectedFiles = [
-								"Locations.swift",
-								"Names.swift"
+								"first.swift",
+								"second.swift"
 						]
 
 						XCTAssertEqual(
